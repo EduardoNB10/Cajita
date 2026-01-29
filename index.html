@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Felices 6 Meses, Mi Amor!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-pink: #ff69b4; /* Rosa Chicle */
+            --secondary-pink: #ffc0cb; /* Rosa Claro */
+            --light-bg: #fff0f5; /* Blanco Rosado */
+            --dark-text: #333;
+            --heart-red: #e74c3c;
+            --gradient-start: #ffadd1;
+            --gradient-end: #ff69b4;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: var(--dark-text);
+            line-height: 1.7;
+            overflow-x: hidden;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Confeti (Opcional) */
+        .confetti-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 9999;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-pink);
+            transform: rotate(var(--rotation)) scale(var(--scale));
+            opacity: 0;
+            animation: fallConfetti 3s ease-in forwards;
+        }
+        @keyframes fallConfetti {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Header */
+        header {
+            padding: 40px 20px 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-bottom-left-radius: 50% 20px;
+            border-bottom-right-radius: 50% 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 3.5rem;
+            color: var(--primary-pink);
+            margin-bottom: 10px;
+            animation: bounceIn 1s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+
+        /* Main Content */
+        main {
+            flex-grow: 1;
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: 30px auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        section {
+            margin-bottom: 40px;
+            animation: fadeInSlideUp 1s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+            animation-delay: var(--delay, 0s);
+        }
+
+        @keyframes fadeInSlideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.5rem;
+            color: var(--primary-pink);
+            margin-bottom: 20px;
+        }
+
+        /* Contador */
+        .timer-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .time-unit {
+            background-color: var(--secondary-pink);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            min-width: 90px;
+            font-size: 1.1em;
+            font-weight: 700;
+        }
+        .time-unit span {
+            display: block;
+            font-size: 2.2em;
+            margin-bottom: 5px;
+        }
+
+        /* Mensaje Secreto/Poema */
+        .secret-message {
+            background: var(--light-bg);
+            border-radius: 15px;
+            padding: 30px;
+            border: 2px dashed var(--primary-pink);
+            position: relative;
+            overflow: hidden;
+        }
+        .secret-message p {
+            font-size: 1.15em;
+            color: var(--dark-text);
+            text-align: left;
+            margin: 0;
+            padding: 0;
+            white-space: pre-wrap; /* Mantiene saltos de línea y espacios */
+        }
+        .reveal-button {
+            background-color: var(--primary-pink);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-top: 25px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .reveal-button:hover {
+            background-color: var(--heart-red);
+            transform: translateY(-2px);
+        }
+        .revealed-text {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.7s ease-out, opacity 0.7s ease-out;
+        }
+        .revealed-text.active {
+            max-height: 500px; /* Suficiente para el texto */
+            opacity: 1;
+        }
+
+        /* Cupón Digital */
+        .coupon-container {
+            position: relative;
+            width: 80%;
+            max-width: 400px;
+            height: 200px; /* Altura para el cupón */
+            margin: 40px auto;
+            background: url('https://images.unsplash.com/photo-1555545244-6338b0dd4711?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80') center center / cover no-repeat; /* Imagen de fondo para el cupón */
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .coupon-container:hover {
+            transform: scale(1.03);
+        }
+        .coupon-scratch-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(180, 100, 150, 0.9); /* Capa "rascable" */
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-family: 'Pacifico', cursive;
+            font-size: 2em;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+            transition: opacity 0.5s ease-out;
+        }
+        .coupon-scratch-layer.scratched {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .coupon-content {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--primary-pink);
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.3em;
+            font-weight: 700;
+            text-align: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.7s ease-out;
+        }
+        .coupon-content.revealed {
+            opacity: 1;
+        }
+        .coupon-content small {
+            font-size: 0.9em;
+            margin-top: 10px;
+            color: #777;
+        }
+
+
+        /* Footer */
+        footer {
+            margin-top: 50px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-top-left-radius: 50% 20px;
+            border-top-right-radius: 50% 20px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+            color: var(--dark-text);
+            font-size: 0.9em;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Estilos Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            .time-unit span { font-size: 1.8em; }
+            .time-unit { padding: 10px 15px; min-width: 80px; }
+            .coupon-scratch-layer { font-size: 1.5em; }
+            .coupon-content { font-size: 1em; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.8rem; }
+            main { padding: 20px 15px; margin: 20px auto; }
+            .time-unit { min-width: 70px; }
+            .coupon-container { height: 180px; }
+            .secret-message p { font-size: 1em; }
+        }
+
+        .kuro{
+            color: purple;
+            font-style: italic
+        }
+    </style>
+</head>
+<body>
+    <div class="confetti-container" id="confetti-container"></div>
+
+    <header>
+        <h1>¡Felices 6 Meses, Mi Amor!</h1>
+        <p>Un pequeño detalle para celebrar nuestro día especial.</p>
+    </header>
+
+    <main>
+        <section style="--delay: 0.2s;">
+            <h2>Nuestro Viaje</h2>
+            <p>Seis meses de risas, de apoyo incondicional y de un amor que crece cada día. Gracias por cada momento, por cada mirada y por ser mi persona favorita en el mundo.</p>
+            <div class="timer-container">
+                <div class="time-unit"><span id="days">0</span>Días</div>
+                <div class="time-unit"><span id="hours">0</span>Horas</div>
+                <div class="time-unit"><span id="minutes">0</span>Minutos</div>
+                <div class="time-unit"><span id="seconds">0</span>Segundos</div>
+            </div>
+        </section>
+
+        <section style="--delay: 0.5s;">
+            <h2>Un Mensaje para vos</h2>
+            <div class="secret-message">
+                <p class="revealed-text" id="secretPoem">
+                En cada amanecer, seis meses de ti,
+                Mi vida se tiñe de dulce carmesí.
+                Tu risa, mi melodía; tus ojos, mi faro,
+                En este camino, eres mi regalo más claro.
+
+                Cada día a tu lado, una historia sin fin,
+                Un lienzo de sueños que juntos hemos de teñir.
+                Gracias por tu paciencia, tu luz y tu calor,
+                Por ser mi refugio, mi eterno amor.
+
+                Que estos seis meses sean solo el comienzo,
+                De un viaje de abrazos, de sueños, de inmenso.
+                Mi corazón te grita, en cada latido,
+                ¡Te amo más que ayer, y siempre lo he querido!
+                </p>
+                <button class="reveal-button" id="revealBtn">¡Lee mi corazón!</button>
+            </div>
+        </section>
+
+        <section style="--delay: 0.8s;">
+            <h2>Tu Regalo Especial</h2>
+            <p>¡Aquí tenes un pequeño obsequio interactivo solo para vos! "Rasca" el cupón para ver lo que he preparado.</p>
+            <div class="coupon-container" id="couponContainer">
+                <div class="coupon-scratch-layer" id="scratchLayer">
+                    ¡RASCA AQUÍ!
+                </div>
+                <div class="coupon-content" id="couponContent">
+                    ✨ Esta cajita ✨
+                    <br>En esta cajita esta algo que te quiero con todo mi amor, pista <span class="kuro">(Kuromi)</span>.
+                    <small>(De tu amor)</small>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        Hecho con muchísimo amor para mi niña. ❤️
+    </footer>
+
+    <script>
+        // --- Confetti Effect ---
+        function createConfetti() {
+            const confettiContainer = document.getElementById('confetti-container');
+            for (let i = 0; i < 50; i++) { // Más confeti para celebrar
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`; // Colores variados
+                confetti.style.animationDuration = Math.random() * 2 + 3 + 's';
+                confetti.style.setProperty('--rotation', `${Math.random() * 720}deg`);
+                confetti.style.setProperty('--scale', `${Math.random() * 0.8 + 0.2}`);
+                confettiContainer.appendChild(confetti);
+
+                // Remover confeti después de su animación
+                confetti.addEventListener('animationend', () => confetti.remove());
+            }
+        }
+
+        // --- Timer para los 6 Meses ---
+        // Establece la fecha de inicio de su relación
+        const startDate = new Date('2025-07-21T00:00:00'); // <--- ¡IMPORTANTE! Cambia esto a la fecha real de su inicio (AAAA-MM-DD)
+        const targetDate = new Date(startDate);
+        targetDate.setMonth(targetDate.getMonth() + 6); // Calcula la fecha de 6 meses
+
+        function updateTimer() {
+            const now = new Date();
+            let diff;
+            let messagePrefix = "";
+
+            if (now < targetDate) {
+                diff = targetDate - now;
+                messagePrefix = "Faltan ";
+                document.getElementById('revealBtn').innerText = "¡Lee mi corazón! (Pronto)"; // Deshabilita botón si aún no llegan
+                document.getElementById('revealBtn').disabled = true;
+            } else {
+                diff = now - startDate;
+                messagePrefix = "Llevamos ";
+                document.getElementById('revealBtn').innerText = "¡Lee mi corazón!";
+                document.getElementById('revealBtn').disabled = false;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            document.getElementById('days').innerText = days;
+            document.getElementById('hours').innerText = hours;
+            document.getElementById('minutes').innerText = minutes;
+            document.getElementById('seconds').innerText = seconds;
+
+            // Actualiza el texto principal del header cuando se llega a la fecha
+            if (now >= targetDate && document.querySelector('header p').innerText !== "¡Felices seis meses de amor!") {
+                document.querySelector('header p').innerText = "¡Felices seis meses de amor!";
+                createConfetti(); // Lanza confeti al llegar
+            }
+        }
+
+        // --- Reveal Button (Poema) ---
+        const revealBtn = document.getElementById('revealBtn');
+        const secretPoem = document.getElementById('secretPoem');
+
+        revealBtn.addEventListener('click', () => {
+            if (!revealBtn.disabled) { // Solo si no está deshabilitado por el timer
+                secretPoem.classList.add('active');
+                revealBtn.style.display = 'none'; // Oculta el botón una vez revelado
+                createConfetti(); // Lanza confeti al revelar el poema
+            }
+        });
+
+        // --- Coupon Scratch Effect ---
+        const couponContainer = document.getElementById('couponContainer');
+        const scratchLayer = document.getElementById('scratchLayer');
+        const couponContent = document.getElementById('couponContent');
+
+        couponContainer.addEventListener('click', () => {
+            if (!scratchLayer.classList.contains('scratched')) {
+                scratchLayer.classList.add('scratched');
+                couponContent.classList.add('revealed');
+                createConfetti(); // Lanza confeti al "rascar" el cupón
+            }
+        });
+
+        // Inicializar
+        setInterval(updateTimer, 1000);
+        updateTimer(); // Llamar una vez para que no haya retraso inicial
+
+        // Animación de aparición de secciones
+        const sections = document.querySelectorAll('section');
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const sectionObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target); // Solo anima una vez
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            sectionObserver.observe(section);
+        });
+
+    </script>
+</body>
+</html>
